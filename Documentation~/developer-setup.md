@@ -1,15 +1,17 @@
-# Overview
+# Developer Setup {#developer-setup}
 
 This is a summary of the setup and workflows for developers who want to modify the Cesium for Unity plugin. If you just want to use Cesium for Unity in your own applications, see the main [README](../README.md).
+<!--! [TOC] -->
 
-## :computer: Building Cesium for Unity
+## 🖥️ Building Cesium for Unity
 
 ### Prerequisites
 
 * CMake v3.18 or later (the latest version is recommended)
 * [.NET SDK v6.0 or later](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 * If you're using Visual Studio, you need Visual Studio 2022.
-* Unity 2021.3+ (the latest version of the Unity 2021.3 LTS release is recommended)
+* No matter what compiler you're using, it needs to have solid support for C++20.
+* Unity 2022.3+ (the latest version of the Unity 2022.3 LTS release is recommended)
 * On Windows, support for long file paths must be enabled, or you are likely to see build errors. See [Maximum Path Length Limitation](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry#enable-long-paths-in-windows-10-version-1607-and-later).
 * For best JPEG-decoding performance, you must have [nasm](https://www.nasm.us/) installed so that CMake can find it. Everything will work fine without it, just slower.
 
@@ -18,7 +20,7 @@ The built Cesium for Unity Assembly will run on much older versions of .NET, inc
 To make sure things are set up correctly, open a command-prompt (PowerShell is a good choice on Windows) and run:
 
 * `dotnet --version` and verify that it reports 6.0 or later
-* `cmake --version` and verify that it reports 3.15 or later
+* `cmake --version` and verify that it reports 3.18 or later
 
 ### Setting up the development environment
 
@@ -37,7 +39,7 @@ git clone --recurse-submodules git@github.com:CesiumGS/cesium-unity.git com.cesi
 
 Be sure to also clone the submodules. If you forgot the `--recurse-submodules` option when you cloned, run `git submodule update --init --recursive` inside the `com.cesium.unity` folder.
 
-## Reinterop
+## Reinterop {#reinterop-guide}
 
 Reinterop is a Roslyn (C# compiler) source generator that is automatically invoked by Unity while compiling the Cesium for Unity C# code, and generates C# <-> C++ interop layer.
 
@@ -50,6 +52,8 @@ dotnet publish Reinterop~ -o .
 This should be repeated if you modify Reinterop, or if you pull new changes that modify it.
 
 For more details, see the [Reinterop README](../Reinterop~/README.md).
+
+A common mistake is to open Unity before doing this step, which will cause Unity to delete `Reinterop.dll.meta` file because the `Reinterop.dll` file does not yet exist. Then, even after you publish `Reinterop.dll`, the `Reinterop.dll.meta` that Unity creates will be missing important information, and you'll get errors when Unity attemps to compile Cesium for Unity. If this happens to you, executing `git restore Reinterop.dll.meta` should fix it.
 
 ## Build for the Editor
 
@@ -113,7 +117,7 @@ The cesium-unity-samples project has several scenes that help you to quickly get
 To create a release package of Cesium for Unity, suitable to be installed with the Unity Package Manager, do the following (adjust the Unity path for your system):
 
 ```
-$ENV:UNITY="C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Unity.exe"
+$ENV:UNITY="C:\Program Files\Unity\Hub\Editor\2022.3.41f1\Editor\Unity.exe"
 mkdir -p c:\cesium\CesiumForUnityBuildProject\Packages
 cd c:\cesium\CesiumForUnityBuildProject\Packages
 git clone --recurse-submodules git@github.com:CesiumGS/cesium-unity.git com.cesium.unity

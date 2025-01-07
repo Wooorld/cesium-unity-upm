@@ -1,6 +1,129 @@
 # Change Log
 
-### v1.8.0 - 2023-03-01
+## v1.14.1 - 2025-01-02
+
+This is the last release of Cesium for Unity that will support Unity 2021 LTS (2021.3). Future versions will require Unity 2022 LTS (2022.3) or Unity 6.
+
+##### Fixes :wrench:
+
+- Fixed a bug that could cause a crash on AppDomain reloads.
+- Fixed a bug that could cause a crash or incorrect textures when multiple `Cesium3DTileset` tiles referenced the same image by URL.
+- Fixed a bug that could cause incorrect colors in a model that did have vertex colors but did not have normals.
+- Fixed a bug that could cause a hang when attempting to load a model with UINT16 indices where generating flat normals required more than 2^16 vertices.
+- Fixed a bug in the Abseil vcpkg overlay port that could cause linker errors on some systems.
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.42.0 to v0.43.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+## v1.14.0 - 2024-12-02
+
+##### Additions :tada:
+
+- Added a "From Ellipsoid" option to `Cesium3DTileset` to generate a tileset by tessellating the surface of the ellipsoid, producing a simple globe tileset without terrain features.
+
+##### Fixes :wrench:
+
+- Fixed a bug in `CesiumWebMapTileServiceRasterOverlay` that caused automatic Tile Matrix Set Labels to be created incorrectly, leading to incorrect tile request URLs.
+
+In addition to the above, this release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.41.0 to v0.42.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+## v1.13.1 - 2024-11-01
+
+##### Fixes :wrench:
+
+- Added restrictions to `CesiumRuntime.asmdef` to prevent the plugin from attempting to load on platforms not supported by Cesium for Unity.
+
+In addition to the above, this release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.40.1 to v0.41.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+## v1.13.0 - 2024-10-01
+
+##### Additions :tada:
+
+- Added a new `CesiumCameraManager` component. It allows configuration of the cameras to use for Cesium3DTileset culling and level-of-detail.
+- Added `SampleHeightMostDetailed` method to `Cesium3DTileset`. It asynchronously queries the height of a tileset at a list of positions.
+
+##### Fixes :wrench:
+
+- Fixed a bug that could cause a `NullReferenceException` when a `Cesium3DTileset` was not nested into a game object with a `CesiumGeoreference`.
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.39.0 to v0.40.1. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+## v1.12.0 - 2024-09-02
+
+##### Breaking Changes :mega:
+
+- Player builds for macOS now require macOS 10.15+. Previously, 10.13+ was supported.
+
+##### Additions :tada:
+
+- Editor builds for macOS now target macOS 10.15+. Previously, macOS 12.7+ was required.
+- Added `originPlacement` property to `CesiumGeoreference` to toggle between "Cartographic Origin" and "True Origin" reference modes. Whereas "Cartographic Origin" is the default for georeferenced tilesets, "True Origin" may be used for non-georeferenced tilesets centered at the origin.
+
+##### Fixes :wrench:
+
+- Fixed a bug that prevented using the Token panel with a new Cesium ion Server that had never had its token set before.
+- Fixed a bug that could cause a crash in `CesiumIonSession` when the object was garbage collected or the AppDomain was unloaded while network requests were in progress.
+- Fixed a bug that could cause `CesiumFlyToController` to unexpectedly interrupt a flight.
+- glTF `doubleSided` materials are now supported. Previously, models using this property would appear inside-out.
+- Fixed a bug that prevented clipping with CesiumCartographicPolygon from working with HDRP.
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.38.0 to v0.39.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+## v1.11.1 - 2024-08-01
+
+##### Fixes :wrench:
+
+- Fixed a bug that caused a `NullReferenceException` when attempting to get or set the `longitudeLatitudeHeight` property on a disabled `CesiumGlobeAnchor`.
+- Fixed a bug introduced in v1.11.0 that caused `CesiumCartographicPolygon` positions to be interpreted incorrectly, making polygon clipping unusable.
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.37.0 to v0.38.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+### v1.11.0 - 2024-07-01
+
+##### Additions :tada:
+
+- Added support for custom non-WGS84 ellipsoids.
+  - The ellipsoid can be changed by specifying a `CesiumEllipsoid` asset in the new "Ellipsoid Override" property of a `CesiumGeoreference`.
+  - New `CesiumEllipsoid` assets can be created using the menu option `Assets > Create > Cesium > Ellipsoid`.
+
+##### Fixes :wrench:
+
+- Cesium for Unity now links statically against the MSVC runtime library on Windows, avoiding the need for an MSVC redistributable to be installed.
+- Fixed a bug that caused Cesium ion tokens selected on the Tokens panel to fail to save.
+- Fixed a bug that caused the "Select Cesium ion Token" panel to show the wrong state when the current token was not from the currently-signed-in Cesium ion account, but the signed-in account had a token named after the current Unity project.
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.36.0 to v0.37.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+### v1.10.1 - 2024-06-03
+
+This release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.35.0 to v0.36.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+### v1.10.0 - 2024-05-01
+
+##### Additions :tada:
+
+- Added support for Cesium ion servers in single user mode. Tokens are not required to stream assets from such servers.
+
+##### Fixes :wrench:
+
+- Fixed a bug where `CesiumCreditSystem` would delete itself from its scene when other additive scenes were unloaded.
+
+In addition to the above, this release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.34.0 to v0.35.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+### v1.9.0 - 2024-04-01
+
+##### Additions :tada:
+
+- Added `CesiumWebMapTileServiceRasterOverlay`, which enables Web Map Tile Service (WMTS) imagery to be draped on a `Cesium3DTileset`.
+- Added support for the `KHR_texture_transform` glTF extension - including rotation - for picking with `CesiumFeatureIdTexture`.
+
+##### Fixes :wrench:
+
+- Normal, metallic-roughness, and occlusion textures from glTF models will now be correctly treated as linear rather than sRGB.
+- Fixed a bug where UVs were not properly interpolated in `CesiumFeatureIdTexture.GetFeatureIdFromHit`, resulting in incorrect values.
+
+In addition to the above, this release updates [cesium-native](https://github.com/CesiumGS/cesium-native) from v0.33.0 to v0.34.0. See the [changelog](https://github.com/CesiumGS/cesium-native/blob/main/CHANGES.md) for a complete list of changes in cesium-native.
+
+### v1.8.0 - 2024-03-01
 
 ##### Breaking Changes :mega:
 
@@ -19,7 +142,7 @@
 - Added `CesiumMetadataValue`, which can hold a metadata value from `EXT_structural_metadata` while abstracting away its type.
 - Added a `distance` property to `CesiumOriginShift`, which specifies the maximum allowed distance from the current origin before it is shifted.
 - Added support for the `KHR_texture_transform` glTF extension - including rotation - in `baseColorTexture`, `metallicRoughnessTexture`, `emissiveTexture`, `normalTexture`, and `occlusionTexture`. The transformation is now applied on the GPU via nodes in the Material, rather than on the CPU by directly modifying texture coordinates.
-- Added `materialKey` to `CesiumRasterOverlay`, which matches the overlay to its corresponding parameters in the tileset's material. This allows for explicit ordering of raster overlays and overlay-specific effects. 
+- Added `materialKey` to `CesiumRasterOverlay`, which matches the overlay to its corresponding parameters in the tileset's material. This allows for explicit ordering of raster overlays and overlay-specific effects.
 - `CesiumCameraController` can now accept custom input actions that override the default inputs.
 
 ##### Fixes :wrench:

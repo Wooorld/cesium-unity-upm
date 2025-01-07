@@ -219,8 +219,9 @@ namespace CesiumForUnity
         private bool DetectMovementInput()
         {
             double3 currentPositionECEF = this._globeAnchor.positionGlobeFixed;
-            bool3 positionEquality = currentPositionECEF == this._previousPositionECEF;
-            return !positionEquality.x || !positionEquality.y || !positionEquality.z;
+            double distanceSquared = math.lengthsq(currentPositionECEF - this._previousPositionECEF);
+            const double distanceConsideredMovement = 1e-6; // 1/1000 of a millimeter
+            return distanceSquared >= (distanceConsideredMovement * distanceConsideredMovement);
         }
 
         /// <summary>
@@ -357,11 +358,14 @@ namespace CesiumForUnity
         {
             // The source and destination rotations are expressed in East-Up-North coordinates.
             pitchAtDestination = Mathf.Clamp(pitchAtDestination, -89.99f, 89.99f);
-            this._sourceRotation = this.transform.rotation;
+            this._sourceRotation = this._globeAnchor.transform.rotation;
             this._destinationRotation = Quaternion.Euler(pitchAtDestination, yawAtDestination, 0.0f);
             this._destinationECEF = destinationECEF;
 
-            this._flightPath = CesiumSimplePlanarEllipsoidCurve.FromEarthCenteredEarthFixedCoordinates(sourceECEF, destinationECEF);
+            this._flightPath = CesiumSimplePlanarEllipsoidCurve.FromCenteredFixedCoordinates(
+                this._georeference.ellipsoid,
+                sourceECEF, 
+                destinationECEF);
             this._flightPathLength = math.length(sourceECEF - destinationECEF);
 
             this._maxHeight = 0.0;
@@ -483,7 +487,7 @@ namespace CesiumForUnity
             bool canInterruptByMoving)
         {
             double3 destinationECEF =
-                CesiumWgs84Ellipsoid.LongitudeLatitudeHeightToEarthCenteredEarthFixed(destination);
+                this._georeference.ellipsoid.LongitudeLatitudeHeightToCenteredFixed(destination);
 
             this.FlyToLocationEarthCenteredEarthFixed(
                 destinationECEF,
@@ -522,7 +526,7 @@ namespace CesiumForUnity
                 z = destination.z
             };
             double3 destinationECEF =
-                CesiumWgs84Ellipsoid.LongitudeLatitudeHeightToEarthCenteredEarthFixed(
+                this._georeference.ellipsoid.LongitudeLatitudeHeightToCenteredFixed(
                     destinationCoordinates);
 
             this.FlyToLocationEarthCenteredEarthFixed(
