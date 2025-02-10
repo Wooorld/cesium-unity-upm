@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UIElements;
 
 #if ENABLE_INPUT_SYSTEM
@@ -74,6 +75,7 @@ namespace CesiumForUnity
 #endif
             }
         }
+
 
 #if UNITY_EDITOR
         private void AddCreditsToSceneView(SceneView sceneView)
@@ -305,15 +307,12 @@ namespace CesiumForUnity
 
         private void SetCredits(List<CesiumCredit> onScreenCredits, List<CesiumCredit> popupCredits)
         {
-            if (this._onScreenCredits != null && this._popupCredits != null)
-            {
-                this.SetCreditsOnVisualElements(
-                    this._onScreenCredits,
-                    onScreenCredits,
-                    this._popupCredits,
-                    popupCredits,
-                    true);
-            }
+            this.SetCreditsOnVisualElements(
+                this._onScreenCredits,
+                onScreenCredits,
+                this._popupCredits,
+                popupCredits,
+                true);
 
 #if UNITY_EDITOR
             ArrayList sceneViews = SceneView.sceneViews;
