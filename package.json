@@ -22,10 +22,5 @@
     "com.unity.test-framework": "1.1.31",
     "com.unity.shadergraph": "12.1.6",
     "com.unity.inputsystem": "1.4.2"
-  },
-  "repository": {
-    "url": "git@github.com:meta-meta/bashrc.git",
-    "type": "git",
-    "revision": "00585f95ad03fc3b613feda35bd4308a8e7a15ff"
   }
 }
